@@ -3,6 +3,7 @@
 import React from 'react'
 import { StyleSheet, View, TextInput, Button, Text, FlatList, ActivityIndicator } from 'react-native'
 import FilmItem from './FilmItem'
+import FilmDetail from './FilmDetail'
 import { getFilmsFromApiWithSearchedText } from '../API/TMDBApi'
 
 class Search extends React.Component {
@@ -16,6 +17,12 @@ class Search extends React.Component {
       films: [],
       isLoading: false
     }
+  }
+
+  _displayDetailForFilm = (idFilm) => {
+    console.log("Display film with id " + idFilm)
+    this.props.navigation.navigate("FilmDetail")
+
   }
 
   _loadFilms() {
@@ -69,7 +76,7 @@ class Search extends React.Component {
         <FlatList
           data={this.state.films}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => <FilmItem film={item}/>}
+          renderItem={({item}) => <FilmItem film={item} displayDetailForFilm={this._displayDetailForFilm}/>}
           onEndReachedThreshold={0.5}
           onEndReached={() => {
               if (this.state.films.length > 0 && this.page < this.totalPages) { // On vérifie également qu'on n'a pas atteint la fin de la pagination (totalPages) avant de charger plus d'éléments
